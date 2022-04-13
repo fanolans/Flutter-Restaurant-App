@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
 
   final List<BottomNavigationBarItem> _bottomNavBarItems = [
     BottomNavigationBarItem(
-      icon: Icon(Platform.isIOS ? CupertinoIcons.news : Icons.public),
+      icon: Icon(Platform.isIOS ? CupertinoIcons.news : Icons.list),
       label: _listText,
     ),
     BottomNavigationBarItem(
