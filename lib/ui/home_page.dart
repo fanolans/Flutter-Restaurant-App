@@ -4,36 +4,38 @@ import 'package:flutter/cupertino.dart';
 import 'package:restaurant_app/ui/restaurant_list_page.dart';
 import 'package:restaurant_app/ui/account_page.dart';
 import 'package:restaurant_app/widgets/platform_widgets.dart';
+import 'package:restaurant_app/provider/restaurant_provider.dart';
+import 'package:restaurant_app/data/api/api_service.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/home_page';
-
-  const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  static const String _headlineText = 'Restaurants';
+  int _bottomNavIndex = 0;
+  static const String _listText = 'List';
+
+  final List<Widget> _listWidget = [
+    ChangeNotifierProvider<RestaurantListProvider>(
+      create: (_) => RestaurantListProvider(apiService: ApiService()),
+      child: const RestaurantListPage(),
+    ),
+    const SettingsPage(),
+  ];
 
   final List<BottomNavigationBarItem> _bottomNavBarItems = [
     BottomNavigationBarItem(
-      icon: Icon(
-          Platform.isIOS ? CupertinoIcons.list_bullet : Icons.list_rounded),
-      label: _headlineText,
+      icon: Icon(Platform.isIOS ? CupertinoIcons.news : Icons.public),
+      label: _listText,
     ),
     BottomNavigationBarItem(
-      icon: Icon(
-          Platform.isIOS ? CupertinoIcons.person_crop_circle : Icons.person),
+      icon: Icon(Platform.isIOS ? CupertinoIcons.settings : Icons.settings),
       label: SettingsPage.settingsTitle,
     ),
-  ];
-
-  int _bottomNavIndex = 0;
-  final List<Widget> _listWidget = [
-    const RestaurantListPage(),
-    SettingsPage(),
   ];
 
   void _onBottomNavTapped(int index) {

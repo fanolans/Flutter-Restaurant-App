@@ -1,60 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_app/common/styles.dart';
-import 'package:restaurant_app/model/restaurants.dart';
-import 'package:restaurant_app/ui/restaurant_detail_page.dart';
+import 'package:restaurant_app/provider/restaurant_provider.dart';
+import 'package:restaurant_app/widgets/card_restaurant.dart';
 import 'package:restaurant_app/widgets/platform_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:restaurant_app/ui/search_page.dart';
+import 'package:provider/provider.dart';
 
 class RestaurantListPage extends StatelessWidget {
   const RestaurantListPage({Key? key}) : super(key: key);
 
-  Widget _buildList(BuildContext context) {
-    return FutureBuilder<String>(
-      future: DefaultAssetBundle.of(context)
-          .loadString('assets/local_restaurant.json'),
-      builder: (context, snapshot) {
-        final List<Restaurant> restaurants = parseRestaurants(snapshot.data);
-        return ListView.builder(
-          itemCount: restaurants.length,
-          itemBuilder: (context, index) {
-            return _buildRestaurantItem(context, restaurants[index]);
-          },
-        );
+  Widget _buildList() {
+    return Consumer<RestaurantListProvider>(
+      builder: (context, state, _) {
+        if (state.state == ResultState.Loading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state.state == ResultState.HasData) {
+          return ListView.builder(
+            shrinkWrap: true,
+            itemCount: state.result.restaurants.length,
+            itemBuilder: (context, index) {
+              var restaurant = state.result.restaurants[index];
+              return CardListRestaurant(restaurant: restaurant);
+            },
+          );
+        } else if (state.state == ResultState.NoData) {
+          return Center(child: Text(state.message));
+        } else if (state.state == ResultState.Error) {
+          return Center(child: Text(state.message));
+        } else {
+          return const Center(child: Text(''));
+        }
       },
     );
-  }
-
-  Widget _buildRestaurantItem(BuildContext context, Restaurant restaurant) {
-    return Material(
-        color: primaryColorBasil,
-        child: Card(
-          elevation: 5.0,
-          margin: EdgeInsets.all(8.0),
-          shape: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16.0),
-              borderSide: const BorderSide(color: Colors.white)),
-          child: ListTile(
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-            leading: Hero(
-              tag: restaurant.id,
-              child: Image.network(
-                restaurant.pictureId,
-                width: 100,
-              ),
-            ),
-            title: Text(
-              'Restaurant ${restaurant.name}',
-            ),
-            subtitle: Text(
-                'Rating ${restaurant.rating} | Location: ${restaurant.city}'),
-            onTap: () {
-              Navigator.pushNamed(context, RestaurantDetailPage.routeName,
-                  arguments: restaurant);
-            },
-          ),
-        ));
   }
 
   Widget _buildAndroid(BuildContext context) {
@@ -68,7 +45,7 @@ class RestaurantListPage extends StatelessWidget {
               icon: const Icon(Icons.search))
         ],
       ),
-      body: _buildList(context),
+      body: _buildList(),
     );
   }
 
@@ -79,7 +56,7 @@ class RestaurantListPage extends StatelessWidget {
         trailing: Icon(CupertinoIcons.search),
         transitionBetweenRoutes: false,
       ),
-      child: _buildList(context),
+      child: _buildList(),
     );
   }
 

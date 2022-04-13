@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_app/model/restaurants.dart';
+import 'package:restaurant_app/data/model/list_restaurants.dart';
 
 class RestaurantDetailPage extends StatelessWidget {
   static const routeName = '/restaurant_detail';
@@ -49,7 +49,7 @@ class RestaurantDetailPage extends StatelessWidget {
                       const SizedBox(height: 10),
                       const Divider(color: Colors.grey),
                       const SizedBox(height: 10),
-                      Column(
+                      /*Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           const Icon(
@@ -59,21 +59,21 @@ class RestaurantDetailPage extends StatelessWidget {
                           ),
                           Text('Foods Menu',
                               style: Theme.of(context).textTheme.subtitle2),
-                          Container(
+                          const SizedBox(
                             height: 150,
-                            child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              children: restaurant.menus.foods.map((food) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Card(
-                                    margin: const EdgeInsets.symmetric(
-                                        vertical: 56.0, horizontal: 4.0),
-                                    child: Text(food.name),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
+                          ),
+                          ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: restaurant.menus.foods.map((food) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Card(
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 56.0, horizontal: 4.0),
+                                  child: Text(food.name),
+                                ),
+                              );
+                            }).toList(),
                           ),
                         ],
                       ),
@@ -88,24 +88,24 @@ class RestaurantDetailPage extends StatelessWidget {
                           ),
                           Text('Drinks Menu',
                               style: Theme.of(context).textTheme.subtitle2),
-                          Container(
+                          const SizedBox(
                             height: 150,
-                            child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              children: restaurant.menus.drinks.map((drink) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Card(
-                                    margin: const EdgeInsets.symmetric(
-                                        vertical: 56.0, horizontal: 4.0),
-                                    child: Text(drink.name),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
+                          ),
+                          ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: restaurant.menus.drinks.map((drink) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Card(
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 56.0, horizontal: 4.0),
+                                  child: Text(drink.name),
+                                ),
+                              );
+                            }).toList(),
                           ),
                         ],
-                      ),
+                      ),*/
                     ],
                   ),
                 ),

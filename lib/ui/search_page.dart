@@ -16,13 +16,14 @@ class SearchPage extends StatelessWidget {
         child: Center(
           child: TextField(
             decoration: InputDecoration(
-                prefixIcon: Icon(
+                prefixIcon: const Icon(
                   Icons.search,
                   color: Colors.black,
                 ),
                 suffixIcon: IconButton(
                   icon: Icon(Icons.clear),
-                  onPressed: () {},
+                  color: Colors.black,
+                  onPressed: () => Navigator.pop(context, true),
                 ),
                 hintText: 'Search Restaurant...',
                 border: InputBorder.none),

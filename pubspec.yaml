@@ -1,7 +1,7 @@
 name: restaurant_app
 description: A new Flutter project.
 
-publish_to: "none" 
+publish_to: "none"
 
 version: 1.0.0+1
 
@@ -15,11 +15,14 @@ dependencies:
   cupertino_icons: ^1.0.2
   google_fonts: ^2.3.1
   flutter_native_splash: ^2.1.2+1
+  http: ^0.13.4
+  provider: ^5.0.0
+  path_provider: ^2.0.9
 
 flutter_native_splash:
   android: true
   ios: true
-  color: '#F4F4F4'
+  color: "#F4F4F4"
   image: assets/restaurants_splash.png
 
 dev_dependencies:
@@ -32,5 +35,4 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/local_restaurant.json
     - assets/restaurants_splash.png
