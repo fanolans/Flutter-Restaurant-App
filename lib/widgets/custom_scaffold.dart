@@ -9,7 +9,7 @@ class CustomScaffold extends StatelessWidget {
 
   Widget _buildShortAppBar(BuildContext context) {
     return Card(
-      margin: EdgeInsets.all(0),
+      margin: const EdgeInsets.all(0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

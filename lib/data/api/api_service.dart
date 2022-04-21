@@ -16,8 +16,8 @@ class ApiService {
     }
   }
 
-  Future<DetailRestaurant> getDetailRestaurant() async {
-    final response = await http.get(Uri.parse(_baseUrl + "/detail/:id"));
+  Future<DetailRestaurant> getDetailRestaurant(String id) async {
+    final response = await http.get(Uri.parse(_baseUrl + "/detail/$id"));
     if (response.statusCode == 200) {
       return DetailRestaurant.fromJson(json.decode(response.body));
     } else {
@@ -25,8 +25,8 @@ class ApiService {
     }
   }
 
-  Future<SearchRestaurant> getSearchRestaurant() async {
-    final response = await http.get(Uri.parse(_baseUrl + "/search?q=query"));
+  Future<SearchRestaurant> getSearchRestaurant(String query) async {
+    final response = await http.get(Uri.parse(_baseUrl + "/search?q=$query"));
     if (response.statusCode == 200) {
       return SearchRestaurant.fromJson(json.decode(response.body));
     } else {
