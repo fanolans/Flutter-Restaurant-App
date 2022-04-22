@@ -38,7 +38,7 @@ class RestaurantListProvider extends ChangeNotifier {
     } catch (e) {
       _state = ResultState.error;
       notifyListeners();
-      return _message = 'Error --> $e';
+      return _message = 'Failed To Load Data, Please Check Your Connection';
     }
   }
 }
