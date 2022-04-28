@@ -3,7 +3,6 @@ import 'package:restaurant_app/common/navigaion.dart';
 import 'package:restaurant_app/data/model/restaurant_model.dart';
 import 'package:restaurant_app/provider/restaurant_favorite_database_provider.dart';
 import 'package:restaurant_app/ui/restaurant_detail_page.dart';
-
 import 'package:provider/provider.dart';
 
 class CardRestaurant extends StatelessWidget {
