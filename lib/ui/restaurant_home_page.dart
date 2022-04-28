@@ -23,7 +23,7 @@ class RestaurantHomePage extends StatefulWidget {
 
 class _HomeScreenState extends State<RestaurantHomePage> {
   int _bottomNavIndex = 0;
-  static const String _listText = 'List';
+  static const String _listText = 'Home';
   static const String _seacrhText = 'Search';
   static const String _favorite = 'Favorite';
 
@@ -43,7 +43,7 @@ class _HomeScreenState extends State<RestaurantHomePage> {
   final List<BottomNavigationBarItem> _bottomNavBarItems = [
     BottomNavigationBarItem(
       icon: Icon(
-        Platform.isIOS ? CupertinoIcons.list_bullet : Icons.list,
+        Platform.isIOS ? CupertinoIcons.home : Icons.home,
       ),
       label: _listText,
     ),
