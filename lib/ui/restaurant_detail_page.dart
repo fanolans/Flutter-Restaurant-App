@@ -3,25 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/data/api/api_service.dart';
 import 'package:restaurant_app/provider/restaurant_detail_provider.dart';
+import 'package:restaurant_app/utils/restaurant_result_state.dart';
 import 'package:restaurant_app/widgets/platform_widgets.dart';
 import 'package:restaurant_app/widgets/restaurant_detail_card.dart';
 
 class RestaurantDetailPage extends StatelessWidget {
-  static const routeName = '/restaurant_detail';
-  final String idDetail;
-  const RestaurantDetailPage({Key? key, required this.idDetail})
-      : super(key: key);
+  static const routeName = '/detail_page';
+  final String id;
+
+  const RestaurantDetailPage({Key? key, required this.id}) : super(key: key);
 
   Widget _buildDetail() {
     return ChangeNotifierProvider<RestaurantDetailProvider>(
-      create: (_) =>
-          RestaurantDetailProvider(apiService: ApiService(), id: idDetail),
+      create: (_) => RestaurantDetailProvider(apiService: ApiService(), id: id),
       child: Consumer<RestaurantDetailProvider>(
         builder: (context, state, _) {
           if (state.state == ResultState.loading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state.state == ResultState.hasData) {
-            final restaurants = state.result.restaurants;
+            final restaurants = state.result.restaurant;
             return RestaurantDetailCard(
               restaurant: restaurants,
             );

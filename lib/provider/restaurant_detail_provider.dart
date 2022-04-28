@@ -1,45 +1,48 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:restaurant_app/data/api/api_service.dart';
-import 'package:restaurant_app/data/model/detail_restaurant.dart';
-
-enum ResultState { loading, noData, hasData, error }
+import 'package:restaurant_app/data/model/restaurant_model.dart';
+import 'package:restaurant_app/utils/restaurant_result_state.dart';
 
 class RestaurantDetailProvider extends ChangeNotifier {
   final ApiService apiService;
   final String id;
 
   RestaurantDetailProvider({required this.apiService, required this.id}) {
-    _getDetailRestaurant(id);
+    _fetchRestaurant(id);
   }
 
-  late DetailRestaurant _detailRestaurant;
+  late RestaurantDetail _restaurantDetail;
   late ResultState _state;
   String _message = '';
 
   String get message => _message;
-
-  DetailRestaurant get result => _detailRestaurant;
+  RestaurantDetail get result => _restaurantDetail;
 
   ResultState get state => _state;
 
-  Future<dynamic> _getDetailRestaurant(String id) async {
+  Future<dynamic> _fetchRestaurant(String id) async {
     try {
       _state = ResultState.loading;
       notifyListeners();
-      final restaurant = await apiService.getDetailRestaurant(id);
-      if (restaurant.error) {
+      final restaurantDetail = await apiService.getRestaurantDetail(id);
+      if (restaurantDetail.error) {
         _state = ResultState.noData;
         notifyListeners();
         return _message = 'Empty Data';
       } else {
         _state = ResultState.hasData;
         notifyListeners();
-        return _detailRestaurant = restaurant;
+        return _restaurantDetail = restaurantDetail;
       }
+    } on SocketException {
+      _state = ResultState.noConnection;
+      notifyListeners();
+      return _message = 'Please check your connection.';
     } catch (e) {
       _state = ResultState.error;
       notifyListeners();
-      return _message = 'Failed To Load Data, Please Check Your Connection';
+      return _message = 'Error';
     }
   }
 }

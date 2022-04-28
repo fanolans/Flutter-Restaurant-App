@@ -1,30 +1,125 @@
-class DetailRestaurant {
-  DetailRestaurant({
+import 'package:equatable/equatable.dart';
+
+class RestaurantList extends Equatable {
+  const RestaurantList({
     required this.error,
     required this.message,
+    required this.count,
     required this.restaurants,
   });
 
-  bool error;
-  String message;
-  Restaurant restaurants;
+  final bool error;
+  final String message;
+  final int count;
+  final List<Restaurant> restaurants;
 
-  factory DetailRestaurant.fromJson(Map<String, dynamic> json) =>
-      DetailRestaurant(
+  @override
+  List<Object> get props => [error, message, count, restaurants];
+
+  factory RestaurantList.fromJson(Map<String, dynamic> json) => RestaurantList(
         error: json["error"],
         message: json["message"],
-        restaurants: Restaurant.fromJson(json["restaurant"]),
+        count: json["count"],
+        restaurants: List<Restaurant>.from(
+            json["restaurants"].map((x) => Restaurant.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "error": error,
         "message": message,
-        "restaurant": restaurants.toJson(),
+        "count": count,
+        "restaurants": List<dynamic>.from(restaurants.map((x) => x.toJson())),
+      };
+}
+
+class RestaurantSearch {
+  RestaurantSearch({
+    required this.error,
+    required this.founded,
+    required this.restaurants,
+  });
+
+  bool error;
+  int founded;
+  List<Restaurant> restaurants;
+
+  factory RestaurantSearch.fromJson(Map<String, dynamic> json) =>
+      RestaurantSearch(
+        error: json["error"],
+        founded: json["founded"],
+        restaurants: List<Restaurant>.from(
+            json["restaurants"].map((x) => Restaurant.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "error": error,
+        "founded": founded,
+        "restaurants": List<dynamic>.from(restaurants.map((x) => x.toJson())),
+      };
+}
+
+class RestaurantDetail {
+  RestaurantDetail({
+    required this.error,
+    required this.message,
+    required this.restaurant,
+  });
+
+  bool error;
+  String message;
+  RestaurantInfo restaurant;
+
+  factory RestaurantDetail.fromJson(Map<String, dynamic> json) =>
+      RestaurantDetail(
+          error: json["error"],
+          message: json["message"],
+          restaurant: RestaurantInfo.fromJson(json["restaurant"]));
+
+  Map<String, dynamic> toJson() => {
+        "error": error,
+        "message": message,
+        "restaurants": restaurant.toJson(),
       };
 }
 
 class Restaurant {
   Restaurant({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.pictureId,
+    required this.city,
+    required this.rating,
+  });
+
+  String id;
+  String name;
+  String description;
+  String pictureId;
+  String city;
+  double rating;
+
+  factory Restaurant.fromJson(Map<String, dynamic> json) => Restaurant(
+        id: json["id"],
+        name: json["name"],
+        description: json["description"],
+        pictureId: json["pictureId"],
+        city: json["city"],
+        rating: json["rating"].toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "description": description,
+        "pictureId": pictureId,
+        "city": city,
+        "rating": rating,
+      };
+}
+
+class RestaurantInfo {
+  RestaurantInfo({
     required this.id,
     required this.name,
     required this.description,
@@ -48,7 +143,7 @@ class Restaurant {
   double rating;
   List<CustomerReview> customerReviews;
 
-  factory Restaurant.fromJson(Map<String, dynamic> json) => Restaurant(
+  factory RestaurantInfo.fromJson(Map<String, dynamic> json) => RestaurantInfo(
         id: json["id"],
         name: json["name"],
         description: json["description"],

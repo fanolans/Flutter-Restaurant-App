@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_app/data/model/detail_restaurant.dart';
+import 'package:restaurant_app/data/model/restaurant_model.dart';
 
 class RestaurantDetailCard extends StatelessWidget {
   static const routeName = '/restaurant_detail';
 
-  final Restaurant restaurant;
+  final RestaurantInfo restaurant;
 
   const RestaurantDetailCard({Key? key, required this.restaurant})
       : super(key: key);
@@ -50,7 +50,7 @@ class RestaurantDetailCard extends StatelessWidget {
                     children: [
                       const Icon(
                         Icons.star,
-                        color: Colors.yellow,
+                        color: Colors.orange,
                         size: 20,
                       ),
                       Text(
@@ -72,11 +72,11 @@ class RestaurantDetailCard extends StatelessWidget {
             const Text('Foods Menu',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
             Column(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: restaurant.menus.foods
                         .map((food) => Text(food.name))
                         .toList(),
@@ -92,11 +92,11 @@ class RestaurantDetailCard extends StatelessWidget {
             const Text('Drinks Menu',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
             Column(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: restaurant.menus.drinks
                         .map((drink) => Text(drink.name))
                         .toList(),
@@ -117,6 +117,7 @@ class RestaurantDetailCard extends StatelessWidget {
                   Row(
                     children: restaurant.customerReviews
                         .map((review) => Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Row(
                                   children: [

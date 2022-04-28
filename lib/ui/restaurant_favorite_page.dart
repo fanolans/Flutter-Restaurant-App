@@ -1,29 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:restaurant_app/provider/restaurant_list_provider.dart';
+import 'package:restaurant_app/provider/restaurant_favorite_database_provider.dart';
 import 'package:restaurant_app/utils/restaurant_result_state.dart';
 import 'package:restaurant_app/widgets/restaurant_error.dart';
 import 'package:restaurant_app/widgets/restaurant_card.dart';
 
-class RestaurantListPage extends StatelessWidget {
-  static const routeName = '/list_page';
-  const RestaurantListPage({Key? key}) : super(key: key);
+class RestaurantFavoritePage extends StatelessWidget {
+  static const routeName = 'favorite_page';
 
-  @override
-  Widget build(BuildContext context) {
+  const RestaurantFavoritePage({Key? key}) : super(key: key);
+
+  Widget _buildList() {
     return Scaffold(
-      body: Consumer<RestaurantListProvider>(builder: (context, state, _) {
-        if (state.state == ResultState.loading) {
+      body: Consumer<FavoriteDatabaseProvider>(
+          builder: (context, provider, child) {
+        if (provider.state == ResultState.loading) {
           return const Center(child: CircularProgressIndicator());
-        } else if (state.state == ResultState.hasData) {
+        } else if (provider.state == ResultState.hasData) {
           return ListView.builder(
               shrinkWrap: true,
-              itemCount: state.result.restaurants.length,
+              itemCount: provider.favorites.length,
               itemBuilder: (context, index) {
-                var restaurant = state.result.restaurants[index];
+                var restaurant = provider.favorites[index];
                 return CardRestaurant(restaurant: restaurant);
               });
-        } else if (state.state == ResultState.noData) {
+        } else if (provider.state == ResultState.noData) {
           return Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -32,12 +33,12 @@ class RestaurantListPage extends StatelessWidget {
               children: [
                 const RestaurantError(),
                 const SizedBox(height: 8),
-                Text(state.message),
+                Text(provider.message),
                 const SizedBox(height: 8),
               ],
             ),
           );
-        } else if (state.state == ResultState.noConnection) {
+        } else if (provider.state == ResultState.noConnection) {
           return Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -46,12 +47,12 @@ class RestaurantListPage extends StatelessWidget {
               children: [
                 const RestaurantError(),
                 const SizedBox(height: 8),
-                Text(state.message),
+                Text(provider.message),
                 const SizedBox(height: 8),
               ],
             ),
           );
-        } else if (state.state == ResultState.error) {
+        } else if (provider.state == ResultState.error) {
           return Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -60,7 +61,7 @@ class RestaurantListPage extends StatelessWidget {
               children: [
                 const RestaurantError(),
                 const SizedBox(height: 8),
-                Text(state.message),
+                Text(provider.message),
                 const SizedBox(height: 8),
               ],
             ),
@@ -70,5 +71,10 @@ class RestaurantListPage extends StatelessWidget {
         }
       }),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildList();
   }
 }

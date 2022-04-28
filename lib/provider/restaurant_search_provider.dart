@@ -1,49 +1,51 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:restaurant_app/data/api/api_service.dart';
-import 'package:restaurant_app/data/model/search_restaurant.dart';
-
-enum ResultState { loading, noData, hasData, error }
+import 'package:restaurant_app/data/model/restaurant_model.dart';
+import 'package:restaurant_app/utils/restaurant_result_state.dart';
 
 class RestaurantSearchProvider extends ChangeNotifier {
   final ApiService apiService;
 
   RestaurantSearchProvider({required this.apiService}) {
-    fetchAllRestaurantSearch(query);
+    fetchQueryRestaurant(query);
   }
 
-  late SearchRestaurant? _searchRestaurant;
-  late ResultState? _state;
-
+  RestaurantSearch? _restaurantList;
+  ResultState? _state;
   String _message = '';
   String _query = '';
 
   String get message => _message;
   String get query => _query;
-
-  SearchRestaurant? get result => _searchRestaurant;
-
+  RestaurantSearch? get result => _restaurantList;
   ResultState? get state => _state;
 
-  Future<dynamic> fetchAllRestaurantSearch(String query) async {
+  Future<dynamic> fetchQueryRestaurant(String query) async {
     try {
-      _state = ResultState.loading;
-      _query = query;
-
-      final restaurantSearch = await apiService.getSearchRestaurant(query);
-      if (restaurantSearch.restaurants.isEmpty) {
-        _state = ResultState.noData;
+      if (query.isNotEmpty) {
+        _state = ResultState.loading;
+        _query = query;
         notifyListeners();
-        return _message = 'Empty Data';
-      } else {
-        _state = ResultState.hasData;
-
-        notifyListeners();
-        return _searchRestaurant = restaurantSearch;
+        final restaurantList = await apiService.searchRestaurant(query);
+        if (restaurantList.restaurants.isEmpty) {
+          _state = ResultState.noData;
+          notifyListeners();
+          return _message = 'Empty Data';
+        } else {
+          _state = ResultState.hasData;
+          notifyListeners();
+          return _restaurantList = restaurantList;
+        }
       }
+    } on SocketException {
+      _state = ResultState.noConnection;
+      notifyListeners();
+      return _message = 'Please check your connection.';
     } catch (e) {
       _state = ResultState.error;
       notifyListeners();
-      return _message = 'Failed To Load Data, Please Check Your Connection';
+      return _message = 'Error --> $e';
     }
   }
 }

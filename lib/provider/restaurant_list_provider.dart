@@ -1,44 +1,49 @@
-import 'package:flutter/material.dart';
-import 'package:restaurant_app/data/model/list_restaurants.dart';
-import 'package:restaurant_app/data/api/api_service.dart';
+import 'dart:io';
 
-enum ResultState { loading, noData, hasData, error }
+import 'package:flutter/foundation.dart';
+import 'package:restaurant_app/data/api/api_service.dart';
+import 'package:restaurant_app/data/model/restaurant_model.dart';
+import 'package:restaurant_app/utils/restaurant_result_state.dart';
 
 class RestaurantListProvider extends ChangeNotifier {
   final ApiService apiService;
 
   RestaurantListProvider({required this.apiService}) {
-    _fetchAllRestaurants();
+    _fetchAllRestaurant();
   }
 
-  late ListRestaurant _listRestaurant;
+  late RestaurantList _restaurantList;
   late ResultState _state;
   String _message = '';
 
   String get message => _message;
 
-  ListRestaurant get result => _listRestaurant;
+  RestaurantList get result => _restaurantList;
 
   ResultState get state => _state;
 
-  Future<dynamic> _fetchAllRestaurants() async {
+  Future<dynamic> _fetchAllRestaurant() async {
     try {
       _state = ResultState.loading;
       notifyListeners();
-      final restaurant = await apiService.getListRestaurant();
-      if (restaurant.restaurants.isEmpty) {
+      final restaurantList = await apiService.getRestaurants();
+      if (restaurantList.restaurants.isEmpty) {
         _state = ResultState.noData;
         notifyListeners();
         return _message = 'Empty Data';
       } else {
         _state = ResultState.hasData;
         notifyListeners();
-        return _listRestaurant = restaurant;
+        return _restaurantList = restaurantList;
       }
+    } on SocketException {
+      _state = ResultState.noConnection;
+      notifyListeners();
+      return _message = 'Please check your connection.';
     } catch (e) {
       _state = ResultState.error;
       notifyListeners();
-      return _message = 'Failed To Load Data, Please Check Your Connection';
+      return _message = 'Error --> $e';
     }
   }
 }
