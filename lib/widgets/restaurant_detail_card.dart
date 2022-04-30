@@ -16,10 +16,12 @@ class RestaurantDetailCard extends StatelessWidget {
         scrollDirection: Axis.vertical,
         child: Column(
           children: <Widget>[
-            Hero(
-              tag: restaurant.pictureId,
-              child: Image.network(
-                "https://restaurant-api.dicoding.dev/images/small/${restaurant.pictureId}",
+            ClipRRect(
+              child: Hero(
+                tag: restaurant.pictureId,
+                child: Image.network(
+                  "https://restaurant-api.dicoding.dev/images/small/${restaurant.pictureId}",
+                ),
               ),
             ),
             Padding(
@@ -110,37 +112,33 @@ class RestaurantDetailCard extends StatelessWidget {
             const Text('Review',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
             SingleChildScrollView(
-              padding: const EdgeInsets.all(8),
-              scrollDirection: Axis.horizontal,
-              child: Column(
-                children: [
-                  Row(
-                    children: restaurant.customerReviews
-                        .map((review) => Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(review.name),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(review.review),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(review.date),
-                                  ],
-                                ),
-                              ],
-                            ))
-                        .toList(),
+                padding: const EdgeInsets.all(8),
+                scrollDirection: Axis.horizontal,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0),
                   ),
-                ],
-              ),
-            ),
+                  elevation: 1.5,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: restaurant.customerReviews
+                          .map((review) => Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    review.name,
+                                  ),
+                                  Text(review.review),
+                                  Text(review.date),
+                                ],
+                              ))
+                          .toList(),
+                    ),
+                  ),
+                )),
           ],
         ),
       ),

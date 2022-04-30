@@ -27,6 +27,8 @@ class RestaurantDetailPage extends StatelessWidget {
             );
           } else if (state.state == ResultState.noData) {
             return Center(child: Text(state.message));
+          } else if (state.state == ResultState.noConnection) {
+            return Center(child: Text(state.message));
           } else if (state.state == ResultState.error) {
             return Center(child: Text(state.message));
           } else {
